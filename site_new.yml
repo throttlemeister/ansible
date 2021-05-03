@@ -1,4 +1,5 @@
 ---
+# A simple change
 # Let's do some stuff we know we need to do for each and every machine
 - name: Talk to all hosts and learn about them
   hosts: all,!synology
