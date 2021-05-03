@@ -1,0 +1,19 @@
+---
+- name: Talk to all hosts and learn about them
+  hosts: all,!yggdrasil.sport-touring.eu
+  tasks:
+    - name: Classify Linux hosts depending on their distribution
+      group_by:
+        key: family_{{ ansible_facts['os_family'] }}
+
+# Do some real work now.
+
+- hosts: family_RedHat
+  become: yes
+  gather_facts: False
+  tasks:
+  - name: Install the RedHat specific packages
+    dnf: 
+      pkg: "{{ packages_rhel }}"
+      update_cache: yes
+      state: latest

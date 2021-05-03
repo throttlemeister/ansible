@@ -1,0 +1,16 @@
+packages:
+  - cifs-utils
+  - hostname
+  - qemu-guest-agent
+  - wget
+  - curl
+  - htop
+  - mc
+  - net-tools
+  - nmon
+  - bmon
+  - ncdu
+  - figlet
+  - glances
+  - perl-Getopt-Long
+  - perl-Data-Dumper

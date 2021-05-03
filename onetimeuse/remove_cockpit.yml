@@ -1,0 +1,9 @@
+---
+- name: Remove Zabbix agent from all servers
+  hosts: all
+  become: yes
+  tasks:
+    - name: Uninstalling...
+      package:
+        name: cockpit
+        state: absent

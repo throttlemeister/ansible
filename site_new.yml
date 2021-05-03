@@ -1,0 +1,174 @@
+---
+# Let's do some stuff we know we need to do for each and every machine
+- name: Talk to all hosts and learn about them
+  hosts: all,!synology
+  tasks:
+    - name: Classify Linux hosts depending on their distribution
+      group_by:
+        key: family_{{ ansible_facts['os_family'] }}
+      tags:
+        - setup
+        - update
+
+# Tags: setup   ## Only tasks that should run on a new machine in order to set it up properly
+# Tags: update  ## Only tasks that should be run when we try to update the packages on the machines
+
+# Do some OS specific work now.
+
+# Let's start with the RedHat based linux distributions
+# Fedora, CentOS, RHEL, AlmaLinux
+- hosts: family_RedHat
+  become: yes
+  gather_facts: False
+  tasks:
+    - name: Check if the RedHat based server has been setup completely
+      stat:
+        path: "/setup_complete"
+      register: check
+      tags: setup
+    - name: Install epel repository on RedHat Enterprise Linux or Fedora
+      when: not check.stat.exists and (ansible_distribution == "RedHat" or ansible_distribution == "Fedora")
+      dnf:
+        name:
+          - https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+      tags: setup
+    - name: Install epel repository on CentOS
+      when: (ansible_distribution == "CentOS" or ansible_distribution == "AlmaLinux") and not check.stat.exists
+      dnf:
+        name:
+          - epel-release
+        update_cache: yes
+        state: latest
+      tags: setup
+    - name: Install the sport-touring.eu base packages on RedHat based Linux
+      when: not check.stat.exists
+      dnf: 
+        pkg: "{{ packages }}"
+        update_cache: yes
+        state: latest
+      tags: setup
+    - name: Install the RedHat specific packages
+      when: not check.stat.exists
+      dnf: 
+        pkg: "{{ packages_rhel }}"
+        update_cache: yes
+        state: latest
+      tags: setup
+    - name: Copy inxi to system
+      when: not check.stat.exists
+      copy:
+        src: /usr/bin/inxi
+        dest: /usr/bin/inxi
+        owner: root
+        group: root
+        mode: 0755
+      tags: setup
+    - name: Upload and extract profile for throttlemeister
+      when: not check.stat.exists
+      unarchive:
+        src: /home/throttlemeister/profile_proper.tar.gz
+        dest: /home/throttlemeister
+      tags: setup
+    - name: Upload and extract profile for root
+      when: not check.stat.exists
+      unarchive:
+        src: /home/throttlemeister/profile_proper.tar.gz
+        dest: /root
+        owner: root
+        group: root
+      tags: setup
+    - name: Set /setup_complete to avoid running these again
+      when: not check.stat.exists
+      file:
+        path: "/setup_complete"
+        state: touch
+      tags: setup
+    - name: Let's make sure all packages are up to date on RedHat based Linux OS
+      dnf:
+        name: "*"
+        state: latest
+      tags: update
+    - name: Remove dependancies that are no longer needed
+      dnf:
+        autoremove: yes
+      tags: update
+    - name: Update inxi to the latest version
+      command: /usr/bin/inxi -U
+      tags: update
+
+# We also have a bunch of Debian based Linux distributions
+# Debian, Ubuntu
+- hosts: family_Debian
+  become: yes
+  gather_facts: False
+  tasks:
+    - name: Check if the Debian based server has been setup completely
+      stat:
+        path: "/setup_complete"
+      register: check
+      tags: setup
+    - name: Install the sport-touring.eu base packages on Debian based Linux
+      when: not check.stat.exists
+      apt: 
+        pkg: "{{ packages }}"
+        update_cache: yes
+        state: latest
+      tags: setup
+    - name: Install the RedHat specific packages
+      when: not check.stat.exists
+      apt: 
+        pkg: "{{ packages_deb }}"
+        update_cache: yes
+        state: latest
+      tags: setup
+    - name: Copy inxi to system
+      when: not check.stat.exists
+      copy:
+        src: /usr/bin/inxi
+        dest: /usr/bin/inxi
+        owner: root
+        group: root
+        mode: 0755
+      tags: setup
+    - name: Upload and extract profile for throttlemeister
+      when: not check.stat.exists
+      unarchive:
+        src: /home/throttlemeister/profile_proper.tar.gz
+        dest: /home/throttlemeister
+      tags: setup
+    - name: Upload and extract profile for root
+      when: not check.stat.exists
+      unarchive:
+        src: /home/throttlemeister/profile_proper.tar.gz
+        dest: /root
+        owner: root
+        group: root
+      tags: setup
+    - name: Set /setup_complete to avoid running these again
+      when: not check.stat.exists
+      file:
+        path: "/setup_complete"
+        state: touch
+      tags: setup
+    - name: Let's make sure all packages are up to date on Debian based Linux OS
+      apt:
+        name: "*"
+        cache_valid_time: 3600
+        state: latest
+      tags: update
+    - name: Clean cache
+      apt:
+        autoclean: yes
+      tags: update
+    - name: Remove dependancies that are no longer needed
+      apt:
+        autoremove: yes
+      tags: update
+
+# A special case is Synology. It is Linux based, but not based on a generic distribution
+- hosts: synology
+  become: yes
+  tasks:
+  - name: Update bootstrap packages on Synology NAS
+    command: "/opt/bin/opkg update && /opt/bin/opkg upgrade"
+    tags: update

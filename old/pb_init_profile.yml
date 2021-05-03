@@ -1,0 +1,15 @@
+---
+- name: Deploy profile files
+  hosts: all
+  become: yes
+  tasks:
+  - name: extract profile for throttlemeister
+    unarchive:
+     src: /home/throttlemeister/profile_proper.tar.gz
+     dest: /home/throttlemeister
+  - name: extract profile for root
+    unarchive:
+     src: /home/throttlemeister/profile_proper.tar.gz
+     dest: /root
+     owner: root
+     group: root
