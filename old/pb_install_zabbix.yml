@@ -1,7 +1,0 @@
----
-- hosts: newvm
-  become: yes
-  roles:
-    - role: dj-wasabi.zabbix-agent
-      agent_server: raspi.sport-touring.eu
-      agent_serveractive: raspi.sport-touring.eu

@@ -1,9 +1,0 @@
----
-- name: Deploy ssh keys
-  hosts: all
-  become: yes
-  tasks:
-  - name: extract ssh keys for throttlemeister
-    unarchive:
-     src: /home/throttlemeister/ssh.tar.gz
-     dest: /home/throttlemeister
