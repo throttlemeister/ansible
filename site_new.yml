@@ -1,5 +1,6 @@
 ---
 # Let's do some stuff we know we need to do for each and every machine
+# but we do not want to do this for the Synology!
 - name: Talk to all hosts and learn about them
   hosts: all,!synology
   tasks:
