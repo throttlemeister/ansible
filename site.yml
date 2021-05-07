@@ -79,14 +79,12 @@
         regexp: '^PasswordAuthentication(.*)$'
         line: PasswordAuthentication no
       tags:
-        - setup
         - hardening
     - name: Restart the SSH service to activate the new configuration
       ansible.builtin.service:
         name: sshd
         state: restarted
       tags:
-        - setup
         - hardening
     - name: Set /setup_complete to avoid running these again
       when: not check.stat.exists
