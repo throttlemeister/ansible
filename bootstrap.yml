@@ -1,0 +1,26 @@
+---
+#
+# We need to have the user throttlemeister present on the system, together with sudo and the right shell
+# to be able to log in to the system and do the rest of the setup.
+#
+- name: Let's bootstrap a new server and get it ready for standard deployment
+  hosts: bootstrap
+  tasks:
+    - name: We need to make sure fish is installed or else we will not be able to login with the user we will create after this
+      action: >
+        {{ ansible_pkg_mgr }} name=fish,sudo state=present update_cache=yes
+    - name: We need to create the user throttlemeister
+      user:
+        name: throttlemeister
+        groups:
+          - users
+          - wheel
+        state: present
+        shell: /usr/bin/fish
+        system: false
+        createhome: true
+        home: /home/throttlemeister
+    - name: Now we need to set up the user profile, because we want to be able to login and we need the SSH keys
+      unarchive:
+        src: /home/throttlemeister/profile_proper.tar.gz
+        dest: /home/throttlemeister

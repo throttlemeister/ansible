@@ -14,3 +14,4 @@ packages:
   - glances
   - perl-Getopt-Long
   - perl-Data-Dumper
+  - git
