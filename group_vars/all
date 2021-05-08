@@ -15,3 +15,7 @@ packages:
   - perl-Getopt-Long
   - perl-Data-Dumper
   - git
+  - cargo
+rustpkg:
+  - exa
+  - ripgrep
