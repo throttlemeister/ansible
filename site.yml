@@ -12,8 +12,9 @@
         - update
         - hardening
 
-# Tags: setup   ## Only tasks that should run on a new machine in order to set it up properly
-# Tags: update  ## Only tasks that should be run when we try to update the packages on the machines
+# Tags: setup     ## Only tasks that should run on a new machine in order to set it up properly
+# Tags: update    ## Only tasks that should be run when we try to update the packages on the machines
+# Tags: hardening ## Only tasks that should be run when hardening the sytem. Seperate section.
 
 # Do some OS specific work now.
 
@@ -65,27 +66,6 @@
         group: root
         mode: 0755
       tags: setup
-    - name: Upload and extract profile for root
-      when: not check.stat.exists
-      unarchive:
-        src: /home/throttlemeister/profile_proper.tar.gz
-        dest: /root
-        owner: root
-        group: root
-      tags: setup
-    - name: Disable password authentication for SSH
-      ansible.builtin.lineinfile:
-        path: /etc/ssh/sshd_config
-        regexp: '^PasswordAuthentication(.*)$'
-        line: PasswordAuthentication no
-      tags:
-        - hardening
-    - name: Restart the SSH service to activate the new configuration
-      ansible.builtin.service:
-        name: sshd
-        state: restarted
-      tags:
-        - hardening
     - name: Set /setup_complete to avoid running these again
       when: not check.stat.exists
       file:
@@ -139,29 +119,6 @@
         group: root
         mode: 0755
       tags: setup
-    - name: Upload and extract profile for root
-      when: not check.stat.exists
-      unarchive:
-        src: /home/throttlemeister/profile_proper.tar.gz
-        dest: /root
-        owner: root
-        group: root
-      tags: setup
-    - name: Disable password authentication for SSH
-      ansible.builtin.lineinfile:
-        path: /etc/ssh/sshd_config
-        regexp: '^PasswordAuthentication(.*)$'
-        line: PasswordAuthentication no
-      tags:
-        - setup
-        - hardening
-    - name: Restart the SSH service to activate the new configuration
-      ansible.builtin.service:
-        name: sshd
-        state: restarted
-      tags:
-        - setup
-        - hardening
     - name: Set /setup_complete to avoid running these again
       when: not check.stat.exists
       file:
@@ -182,6 +139,25 @@
       apt:
         autoremove: yes
       tags: update
+
+# Seperate section dedicated to hardening the systems. Must be run manually and seperately
+- hosts: all,!synology
+  gather_facts: False
+  become: yes
+  tasks:
+  - name: Disable password authentication for SSH
+    ansible.builtin.lineinfile:
+      path: /etc/ssh/sshd_config
+      regexp: '^PasswordAuthentication(.*)$'
+      line: PasswordAuthentication no
+    tags:
+      - hardening
+  - name: Restart the SSH service to activate the new configuration
+    ansible.builtin.service:
+      name: sshd
+      state: restarted
+    tags:
+      - hardening
 
 # A special case is Synology. It is Linux based, but not based on a generic distribution
 - hosts: synology
