@@ -57,14 +57,10 @@
         update_cache: yes
         state: latest
       tags: setup
-    - name: Copy inxi to system
-      when: not check.stat.exists
-      copy:
-        src: /usr/bin/inxi
-        dest: /usr/bin/inxi
-        owner: root
-        group: root
-        mode: 0755
+    - name: Make sure /etc/inxi.conf is not present on system, so we can update manually
+      file:
+        state: absent
+        path: /etc/inxi.conf
       tags: setup
     - name: Set /setup_complete to avoid running these again
       when: not check.stat.exists
@@ -110,14 +106,10 @@
         update_cache: yes
         state: latest
       tags: setup
-    - name: Copy inxi to system
-      when: not check.stat.exists
-      copy:
-        src: /usr/bin/inxi
-        dest: /usr/bin/inxi
-        owner: root
-        group: root
-        mode: 0755
+    - name: Make sure /etc/inxi.conf is not present on system, so we can update manually
+      file:
+        state: absent
+        path: /etc/inxi.conf
       tags: setup
     - name: Set /setup_complete to avoid running these again
       when: not check.stat.exists
