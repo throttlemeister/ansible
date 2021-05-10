@@ -11,6 +11,7 @@
         - setup
         - update
         - hardening
+        - rust
 
 # Tags: setup   ## Only tasks that should run on a new machine in order to set it up properly
 # Tags: update  ## Only tasks that should be run when we try to update the packages on the machines
@@ -184,6 +185,15 @@
       apt:
         autoremove: yes
       tags: update
+
+# Let's add some rust packages
+- hosts: all,!synology
+  gather_facts: False
+  become: yes
+  tasks:
+    - name: Run cargo to install rust packages
+      command: /usr/bin/cargo install exa ripgrep --root /usr/local
+      tags: rust
 
 # A special case is Synology. It is Linux based, but not based on a generic distribution
 - hosts: synology
