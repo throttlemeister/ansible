@@ -35,7 +35,7 @@
         name:
           - https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
       tags: setup
-    - name: Install epel repository on CentOS
+    - name: Install epel repository on CentOS and now AlmaLinux
       when: (ansible_distribution == "CentOS" or ansible_distribution == "AlmaLinux") and not check.stat.exists
       dnf:
         name:
@@ -57,11 +57,6 @@
         update_cache: yes
         state: latest
       tags: setup
-    - name: Make sure /etc/inxi.conf is not present on system, so we can update manually
-      file:
-        state: absent
-        path: /etc/inxi.conf
-      tags: setup
     - name: Set /setup_complete to avoid running these again
       when: not check.stat.exists
       file:
@@ -76,9 +71,6 @@
     - name: Remove dependancies that are no longer needed
       dnf:
         autoremove: yes
-      tags: update
-    - name: Update inxi to the latest version
-      command: /usr/bin/inxi -U
       tags: update
 
 # We also have a bunch of Debian based Linux distributions
@@ -106,11 +98,6 @@
         update_cache: yes
         state: latest
       tags: setup
-    - name: Make sure /etc/inxi.conf is not present on system, so we can update manually
-      file:
-        state: absent
-        path: /etc/inxi.conf
-      tags: setup
     - name: Set /setup_complete to avoid running these again
       when: not check.stat.exists
       file:
@@ -133,6 +120,7 @@
       tags: update
 
 # Seperate section dedicated to hardening the systems. Must be run manually and seperately
+# Also, we can put generic stuff in this section, that works regardless of operating system.
 - hosts: all,!synology
   gather_facts: False
   become: yes
@@ -150,6 +138,15 @@
       state: restarted
     tags:
       - hardening
+  - name: Make sure /etc/inxi.conf is not present on the system, so we can update manually and override the package manager versions
+    file:
+      state: absent
+      path: /etc/inxi.conf
+    tags: update
+  - name: Force manual update on inxi to the latest version
+    command: /usr/bin/inxi -U
+    tags: update
+
 
 # A special case is Synology. It is Linux based, but not based on a generic distribution
 - hosts: synology
