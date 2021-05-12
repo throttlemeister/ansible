@@ -11,10 +11,12 @@
         - setup
         - update
         - hardening
+        - upprofile
 
 # Tags: setup     ## Only tasks that should run on a new machine in order to set it up properly
 # Tags: update    ## Only tasks that should be run when we try to update the packages on the machines
 # Tags: hardening ## Only tasks that should be run when hardening the sytem. Seperate section.
+# Tags: profile   ## Simple task to update the user profile on the servers after install
 
 # Do some OS specific work now.
 
@@ -146,6 +148,20 @@
   - name: Force manual update on inxi to the latest version
     command: /usr/bin/inxi -U
     tags: update
+  - name: Now we need to set up the user profile, because we want to be able to login and we need the SSH keys
+    unarchive:
+      src: /home/throttlemeister/profile_proper.tar.gz
+      dest: /home/throttlemeister
+    tags:
+      - upprofile
+  - name: Upload and extract profile for root
+    unarchive:
+      src: /home/throttlemeister/profile_proper.tar.gz
+      dest: /root
+      owner: root
+      group: root
+    tags:
+      - upprofile
 
 
 # A special case is Synology. It is Linux based, but not based on a generic distribution
