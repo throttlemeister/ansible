@@ -126,6 +126,11 @@
 - hosts: all,!synology
   gather_facts: False
   become: yes
+  handlers:
+    - name: restart_ssh
+      service:
+        name: sshd
+        state: restarted
   tasks:
   - name: Disable password authentication for SSH
     ansible.builtin.lineinfile:
@@ -134,12 +139,8 @@
       line: PasswordAuthentication no
     tags:
       - hardening
-  - name: Restart the SSH service to activate the new configuration
-    ansible.builtin.service:
-      name: sshd
-      state: restarted
-    tags:
-      - hardening
+    notify:
+      - restart_ssh
   - name: Make sure /etc/inxi.conf is not present on the system, so we can update manually and override the package manager versions
     file:
       state: absent
