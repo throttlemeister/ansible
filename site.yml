@@ -12,6 +12,7 @@
         - update
         - hardening
         - upprofile
+        - inxi
 
 # Tags: setup     ## Only tasks that should run on a new machine in order to set it up properly
 # Tags: update    ## Only tasks that should be run when we try to update the packages on the machines
@@ -148,7 +149,7 @@
     tags: update
   - name: Force manual update on inxi to the latest version
     command: /usr/bin/inxi -U
-    tags: update
+    tags: inxi
   - name: Now we need to set up the user profile, because we want to be able to login and we need the SSH keys
     unarchive:
       src: /home/throttlemeister/profile_proper.tar.gz
