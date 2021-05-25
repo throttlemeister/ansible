@@ -11,7 +11,7 @@
         - setup
         - update
         - hardening
-        - upprofile
+        - profile
         - inxi
           # Tags: setup     ## Only tasks that should run on a new machine in order to set it up properly
           # Tags: update    ## Only tasks that should be run when we try to update the packages on the machines
@@ -144,7 +144,7 @@
       src: /home/throttlemeister/profile_proper.tar.gz
       dest: /home/throttlemeister
     tags:
-      - upprofile
+      - profile
   - name: Upload and extract profile for root
     unarchive:
       src: /home/throttlemeister/profile_proper.tar.gz
@@ -152,7 +152,7 @@
       owner: root
       group: root
     tags:
-      - upprofile
+      - profile
 
 
 # A special case is Synology. It is Linux based, but not based on a generic distribution
