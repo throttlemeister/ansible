@@ -1,10 +1,22 @@
 ---
-- name: Talk to all hosts and learn about them
-  hosts: yggdrasil.sport-touring.eu
+- hosts: vili.sport-touring.eu
+  name: Profile distribution
+  gather_facts: False
   become: yes
+  vars_prompt:
+    - name: username
+      prompt: What (normal) user to install the profile for?
+      private: no
   tasks:
-    - name: Test replacement passwdauth
-      ansible.builtin.lineinfile:
-        path: /etc/ssh/sshd_config
-        regexp: '^PasswordAuthentication(.*)$'
-        line: PasswordAuthentication no
+  - name: Now we need to set up the user profile, because we want to be able to login and we need the SSH keys
+    unarchive:
+      src: profile_proper.tar.gz
+      dest: /home/{{ username }}
+      owner: "{{ username }}"
+      group: "{{ username }}"
+  #- name: Upload and extract profile for root
+  #  unarchive:
+  #    src: /home/throttlemeister/profile_proper.tar.gz
+  #    dest: /root
+  #    owner: root
+  #    group: root

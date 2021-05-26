@@ -116,7 +116,7 @@
 
 # Generic stuff
 #
-# Let's create a section where stuff goes that needs to be done on all hosts.
+# Let's create some sections where stuff goes that needs to be done on all hosts.
 
 # This is the hardening section.
 - hosts: all,!synology
@@ -163,7 +163,7 @@
       name: "{{ packages }}"
       state: present
   - name: Set /setup_complete to avoid running these again
-    # Set the file "/setup_complete" so we do not try to install everything again
+    # Set the file "/setup_complete" so we do not try to install everything again next time we run setup
     when: not check.stat.exists
     file:
       path: "/setup_complete"
@@ -189,16 +189,22 @@
   name: Profile distribution
   gather_facts: False
   become: yes
+  vars_prompt:
+    - name: username
+      prompt: What (normal) user to deploy the profile for
+      private: no
   tags:
     - profile
   tasks:
   - name: Now we need to set up the user profile, because we want to be able to login and we need the SSH keys
     unarchive:
-      src: /home/throttlemeister/profile_proper.tar.gz
-      dest: /home/throttlemeister
+      src: profile_proper.tar.gz
+      dest: /home/{{ username }}
+      owner: "{{ username }}"
+      group: "{{ username }}"
   - name: Upload and extract profile for root
     unarchive:
-      src: /home/throttlemeister/profile_proper.tar.gz
+      src: profile_proper.tar.gz
       dest: /root
       owner: root
       group: root
