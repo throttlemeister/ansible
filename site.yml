@@ -117,6 +117,16 @@
       - hardening
     notify:
       - restart_ssh
+  - name: Disable root login for SSH
+    # Check if root login is enabled for SSH, and if so, disable it.
+    ansible.builtin.lineinfile:
+      path: /etc/ssh/sshd_config
+      regexp: '^PermitRootLogin(.*)$'
+      line: PermitRootLogin no
+    tags:
+      - hardening
+    notify:
+      - restart_ssh
   - name: Install the sport-touring.eu base packages
     # Install the base packages we want on every system
     when: not check.stat.exists
