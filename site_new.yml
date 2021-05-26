@@ -11,7 +11,7 @@
         - setup
         - update
         - hardening
-        - upprofile
+        - profile
         - inxi
           # Tags: setup     ## Only tasks that should run on a new machine in order to set it up properly
           # Tags: update    ## Only tasks that should be run when we try to update the packages on the machines
@@ -30,16 +30,20 @@
 
 # Let's start with the RedHat based linux distributions
 # Fedora, CentOS, RHEL, AlmaLinux
+#
+# This is the RedHat specific setup section for all Linux distributions based on RHEL
 - hosts: family_RedHat
+  name: RHEL-based setup
   become: yes
   gather_facts: False
+  tags:
+    - setup
   tasks:
     - name: Install epel repository on RedHat Enterprise Linux or Fedora
       when: not check.stat.exists and (ansible_distribution == "RedHat" or ansible_distribution == "Fedora")
       dnf:
         name:
           - https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
-      tags: setup
     - name: Install epel repository on CentOS and now AlmaLinux
       when: (ansible_distribution == "CentOS" or ansible_distribution == "AlmaLinux") and not check.stat.exists
       dnf:
@@ -47,14 +51,21 @@
           - epel-release
         update_cache: yes
         state: latest
-      tags: setup
     - name: Install the RedHat specific packages
       when: not check.stat.exists
       dnf:
         pkg: "{{ packages_rhel }}"
         update_cache: yes
         state: latest
-      tags: setup
+
+# RedHat specific section for package updates
+- hosts: family_RedHat
+  name: RHEL-based updates
+  become: yes
+  gather_facts: False
+  tags:
+    - update
+  tasks:
     - name: Let's make sure all packages are up to date on RedHat based Linux OS
       dnf:
         name: "*"
@@ -67,9 +78,14 @@
 
 # We also have a bunch of Debian based Linux distributions
 # Debian, Ubuntu
+#
+# Do some Debian specific setup
 - hosts: family_Debian
+  name: Debian-based setup
   become: yes
   gather_facts: False
+  tags:
+    - setup
   tasks:
     - name: Install the Debian specific packages
       when: not check.stat.exists
@@ -77,32 +93,40 @@
         pkg: "{{ packages_deb }}"
         update_cache: yes
         state: latest
-      tags: setup
+
+# Debian specific update section
+- hosts: family_Debian
+  name: Debian-based updates
+  become: yes
+  gather_facts: False
+  tags:
+    - update
+  tasks:
     - name: Let's make sure all packages are up to date on Debian based Linux OS
       apt:
         name: "*"
         cache_valid_time: 3600
         state: latest
-      tags: update
     - name: Clean cache
       apt:
         autoclean: yes
-      tags: update
     - name: Remove dependancies that are no longer needed
       apt:
         autoremove: yes
-      tags: update
 
 # Generic stuff
-
+#
 # Let's create a section where stuff goes that needs to be done on all hosts.
-# This section also includes activities for hardening.
+
+# This is the hardening section.
 - hosts: all,!synology
+  name: System hardening section
   gather_facts: False
   become: yes
+  tags:
+    - hardening
   handlers:
   - name: restart_ssh
-    # Handler so we can restart the SSHD server if we changed the config
     service:
       name: sshd
       state: restarted
@@ -113,24 +137,44 @@
       path: /etc/ssh/sshd_config
       regexp: '^PasswordAuthentication(.*)$'
       line: PasswordAuthentication no
-    tags:
-      - hardening
     notify:
       - restart_ssh
+  - name: Disable root login for SSH
+    # Check if root login is enabled for SSH, and if so, disable it.
+    ansible.builtin.lineinfile:
+      path: /etc/ssh/sshd_config
+      regexp: '^PermitRootLogin(.*)$'
+      line: PermitRootLogin no
+    notify:
+      - restart_ssh
+
+# This is the generic setup section, to be done after the OS specific steps are completed
+- hosts: all,!synology
+  name: Generic setup section
+  gather_facts: False
+  become: yes
+  tags:
+    - setup
+  tasks:
   - name: Install the sport-touring.eu base packages
     # Install the base packages we want on every system
     when: not check.stat.exists
     ansible.builtin.package:
       name: "{{ packages }}"
       state: present
-    tags: setup
   - name: Set /setup_complete to avoid running these again
     # Set the file "/setup_complete" so we do not try to install everything again
     when: not check.stat.exists
     file:
       path: "/setup_complete"
       state: touch
-    tags: setup
+
+# This is a generic update section. Note most OS packages are updated under the OS specific sections.
+- hosts: all,!synology
+  name: Generic update section
+  gather_facts: False
+  become: yes
+  tasks:
   - name: Make sure /etc/inxi.conf is not present on the system, so we can update manually and override the package manager versions
     file:
       state: absent
@@ -139,22 +183,28 @@
   - name: Force manual update on inxi to the latest version
     command: /usr/bin/inxi -U
     tags: inxi
+
+# This section pushes the profile configuration to all hosts, except the Synology.
+- hosts: all,!synology
+  name: Profile distribution
+  gather_facts: False
+  become: yes
+  tags:
+    - profile
+  tasks:
   - name: Now we need to set up the user profile, because we want to be able to login and we need the SSH keys
     unarchive:
       src: /home/throttlemeister/profile_proper.tar.gz
       dest: /home/throttlemeister
-    tags:
-      - upprofile
   - name: Upload and extract profile for root
     unarchive:
       src: /home/throttlemeister/profile_proper.tar.gz
       dest: /root
       owner: root
       group: root
-    tags:
-      - upprofile
 
-
+# Synology stuff
+#
 # A special case is Synology. It is Linux based, but not based on a generic distribution
 - hosts: synology
   become: yes
