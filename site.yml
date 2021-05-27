@@ -11,12 +11,10 @@
         - setup
         - update
         - hardening
-        - profile
         - inxi
           # Tags: setup     ## Only tasks that should run on a new machine in order to set it up properly
           # Tags: update    ## Only tasks that should be run when we try to update the packages on the machines
           # Tags: hardening ## Only tasks that should be run when hardening the sytem. Seperate section.
-          # Tags: profile   ## Simple task to update the user profile on the servers after install
           # Tags: inxi      ## Simple task to update inxi binary. Does not need to be part of regular update
 
     - name: Check if the server has been setup completely
@@ -183,31 +181,6 @@
   - name: Force manual update on inxi to the latest version
     command: /usr/bin/inxi -U
     tags: inxi
-
-# This section pushes the profile configuration to all hosts, except the Synology.
-- hosts: all,!synology
-  name: Profile distribution
-  gather_facts: False
-  become: yes
-  vars_prompt:
-    - name: username
-      prompt: What (normal) user to deploy the profile for
-      private: no
-  tags:
-    - profile
-  tasks:
-  - name: Now we need to set up the user profile, because we want to be able to login and we need the SSH keys
-    unarchive:
-      src: profile_proper.tar.gz
-      dest: /home/{{ username }}
-      owner: "{{ username }}"
-      group: "{{ username }}"
-  - name: Upload and extract profile for root
-    unarchive:
-      src: profile_proper.tar.gz
-      dest: /root
-      owner: root
-      group: root
 
 # Synology stuff
 #
