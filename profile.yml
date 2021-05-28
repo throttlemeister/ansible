@@ -1,6 +1,6 @@
 ---
 # This section pushes the profile configuration to all hosts, except the Synology.
-- hosts: all,!synology
+- hosts: all
   name: Profile distribution
   become: yes
   vars_prompt:
@@ -9,11 +9,19 @@
       private: no
   tasks:
   - name: Now we need to set up the user profile, because we want to be able to login and we need the SSH keys
+    when: inventory_hostname != "yggdrasil.sport-touring.eu"
     unarchive:
       src: profile_proper.tar.gz
       dest: /home/{{ username }}
       owner: "{{ username }}"
       group: "{{ username }}"
+  - name: Now we do the same on our Synology, as it differs from the rest.
+    when: inventory_hostname == "yggdrasil.sport-touring.eu"
+    unarchive:
+      src: profile_proper.tar.gz
+      dest: /var/services/homes/{{ username }}
+      owner: "{{ username }}"
+      group: users
   - name: Upload and extract profile for root
     unarchive:
       src: profile_proper.tar.gz
