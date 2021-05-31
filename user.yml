@@ -1,0 +1,26 @@
+---
+#
+# We want to create a user on all regular servers (ie not Synology). These
+# users do not get sudo rights.
+#
+- hosts: "{{ host_user }}"
+  name: User creation
+  become: yes
+  vars_prompt:
+    - name: username
+      prompt: What (normal) user needs to be created or removed
+      private: no
+    - name: state
+      prompt: Does the user needs to be there or not (present/absent)
+      private: no
+  tasks:
+  - name: Create the user, if needed (on a regular server)
+    when: inventory_hostname != "yggdrasil.sport-touring.eu"
+    user:
+      name: "{{ username }}"
+      state: "{{ state }}"
+      remove: yes
+      shell: /bin/bash
+      system: false
+      createhome: true
+      home: /home/{{ username }}

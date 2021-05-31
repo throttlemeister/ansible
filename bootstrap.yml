@@ -5,7 +5,7 @@
 #
 - name: Let's bootstrap a new server and get it ready for standard deployment
   #hosts: "{{ bootstrap_host | default('bootstrap')}}"
-  hosts: bootstrap
+  hosts: "{{ bootstrap_host }}"
   tasks:
     - name: We need to make sure fish is installed or else we will not be able to login with the user we will create after this
       action: >
