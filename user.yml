@@ -24,3 +24,7 @@
       system: false
       createhome: true
       home: /home/{{ username }}
+  - name: Let's be careful with Synology
+    when: inventory_hostname == "yggdrasil.sport-touring.eu"
+    debug:
+      msg: Not adding user to Synology. For safety reasons, please use DSM to add this user
