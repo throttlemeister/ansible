@@ -12,7 +12,5 @@ packages:
   - ncdu
   - figlet
   - glances
-  - perl-Getopt-Long
-  - perl-Data-Dumper
   - git
   - inxi
