@@ -7,6 +7,7 @@ all:
     gefjon.sport-touring.eu:
     hermod.sport-touring.eu:
     dvalinn.sport-touring.eu:
+      vars: ansible_python_interpreter=/usr/bin/python3
     borr.sport-touring.eu:
     syn.sport-touring.eu:
     mani.sport-touring.eu:

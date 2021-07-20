@@ -1,0 +1,9 @@
+---
+# Let's deploy Zabbix on all servers but the Zabbix server itself
+#
+- name: Deploy the Zabbix agent on all servers
+  hosts: all,!raspi.sport-touring.eu
+  roles:
+    - role: dj-wasabi.zabbix-agent
+      agent_server: raspi.sport-touring.eu
+      agent_serveractive: raspi.sport-touring.eu
