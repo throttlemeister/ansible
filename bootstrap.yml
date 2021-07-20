@@ -44,3 +44,8 @@
         dest: /root
         owner: root
         group: root
+  # We also need to add the Zabbix agent so we can monitor the host, so let's do that now.
+  roles:
+    - role: dj-wasabi.zabbix-agent
+      agent_server: raspi.sport-touring.eu
+      agent_serveractive: raspi.sport-touring.eu
