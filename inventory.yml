@@ -13,6 +13,7 @@ all:
     mani.sport-touring.eu:
     vili.sport-touring.eu:
     forseti.sport-touring.eu:
+    beyla.sport-touring.eu:
   vars:
 synology:
   hosts:
