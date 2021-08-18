@@ -49,13 +49,13 @@
     - role: community.zabbix.zabbix_agent
       zabbix_agent_server: raspi.sport-touring.eu
       zabbix_agent_serveractive: raspi.sport-touring.eu
-      #zabbix_url: http://raspi.sport-touring.eu/zabbix
-      #zabbix_api_create_hosts: true
-      #zabbix_api_use: true
-      #zabbix_api_user: Admin
-      #zabbix_api_pass: 5f55d6446e494acaf73c1a43a73e70d5a141393b2fb4eb7c16a1d157163b7bda
-      #zabbix_create_host: present
-      #zabbix_host_groups:
-      #  - Discovered hosts
-      #zabbix_link_templates:
-      #  - Linux by Zabbix agent
+      zabbix_url: http://raspi.sport-touring.eu/zabbix
+      zabbix_api_create_hosts: true
+      zabbix_api_use: true
+      zabbix_api_user: Admin
+      zabbix_api_pass: kd!s5q%!s4Nf3LsE$rQQijWHg
+      zabbix_create_host: present
+      zabbix_host_groups:
+        - Discovered hosts
+      zabbix_link_templates:
+        - Linux by Zabbix agent
