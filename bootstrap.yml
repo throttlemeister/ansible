@@ -10,30 +10,33 @@
     - name: We need to make sure fish is installed or else we will not be able to login with the user we will create after this
       action: >
         {{ ansible_pkg_mgr }} name=fish,sudo state=present update_cache=yes
+    # Create our user so we can log in normally
     - name: We need to create the user throttlemeister
-      when: ansible_os_family == "RedHat"
       user:
         name: throttlemeister
         groups:
-          - users
           - sudo
         state: present
         shell: /usr/bin/fish
         system: false
         createhome: true
         home: /home/throttlemeister
-    - name: We need to create the user throttlemeister
-      when: ansible_os_family == "Debian"
-      user:
-        name: throttlemeister
-        groups:
-          - users
-          - sudo
+    # Add the user to sudo
+    - name: add throttlemeister to sudo
+      lineinfile:
+        path: /etc/sudoers.d/throttlemeister
+        line: 'throttlemeister ALL=(ALL) NOPASSWD: ALL'
         state: present
-        shell: /usr/bin/fish
-        system: false
-        createhome: true
-        home: /home/throttlemeister
+        mode: 0440
+        create: yes
+        validate: 'visudo -cf %s'
+    - name: Ensure /etc/sudoers.d is included in sudoers
+      lineinfile:
+        dest: /etc/sudoers
+        line: "#includedir /etc/sudoers.d"
+        state: present
+        validate: "/usr/sbin/visudo -cf %s"
+    # Set up the user profile for our standard user as well as for root
     - name: Now we need to set up the user profile, because we want to be able to login and we need the SSH keys
       unarchive:
         src: /home/throttlemeister/profile_proper.tar.gz
@@ -48,7 +51,7 @@
   roles:
     - role: community.zabbix.zabbix_agent
       zabbix_agent_server: raspi.sport-touring.eu
-      zabbix_agent_serveractive: raspi.sport-touring.eu
+      #zabbix_agent_serveractive: raspi.sport-touring.eu
       zabbix_url: http://raspi.sport-touring.eu/zabbix
       zabbix_api_create_hosts: true
       zabbix_api_use: true
