@@ -14,8 +14,6 @@
     - name: We need to create the user throttlemeister
       user:
         name: throttlemeister
-        groups:
-          - sudo
         state: present
         shell: /usr/bin/fish
         system: false
