@@ -4,7 +4,7 @@ all:
     raspi.sport-touring.eu:
     njord.sport-touring.eu:
     bragi.sport-touring.eu:
-    gefjon.sport-touring.eu:
+      #gefjon.sport-touring.eu:
     hermod.sport-touring.eu:
     dvalinn.sport-touring.eu:
       vars: ansible_python_interpreter=/usr/bin/python3
@@ -14,7 +14,6 @@ all:
     vili.sport-touring.eu:
     forseti.sport-touring.eu:
     beyla.sport-touring.eu:
-    eyra.sport-touring.eu:
   vars:
 synology:
   hosts:
