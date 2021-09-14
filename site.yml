@@ -23,7 +23,7 @@
         path: "/setup_complete"
       register: check
       tags: setup
-      
+
 # Do some OS specific work now.
 
 # Let's start with the RedHat based linux distributions
