@@ -11,6 +11,6 @@ packages:
   - bmon
   - ncdu
   - figlet
-  - glances
+  - cowsay
   - git
   - inxi
