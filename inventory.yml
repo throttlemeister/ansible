@@ -14,7 +14,6 @@ all:
     vili.sport-touring.eu:
     forseti.sport-touring.eu:
     beyla.sport-touring.eu:
-    eyra.sport-touring.eu:
   vars:
 synology:
   hosts:
