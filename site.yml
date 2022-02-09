@@ -185,9 +185,9 @@
 # Synology stuff
 #
 # A special case is Synology. It is Linux based, but not based on a generic distribution
-- hosts: synology
-  become: yes
-  tasks:
-  - name: Update bootstrap packages on Synology NAS
-    command: "/opt/bin/opkg update && /opt/bin/opkg upgrade"
-    tags: update
+#- hosts: synology
+#  become: yes
+#  tasks:
+#  - name: Update bootstrap packages on Synology NAS
+#    command: "/opt/bin/opkg update && /opt/bin/opkg upgrade"
+#    tags: update
