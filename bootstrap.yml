@@ -37,11 +37,11 @@
     # Set up the user profile for our standard user as well as for root
     - name: Now we need to set up the user profile, because we want to be able to login and we need the SSH keys
       unarchive:
-        src: /home/throttlemeister/profile_proper.tar.gz
+        src: profile_server.tar.gz
         dest: /home/throttlemeister
     - name: Upload and extract profile for root
       unarchive:
-        src: /home/throttlemeister/profile_proper.tar.gz
+        src: profile_server.tar.gz
         dest: /root
         owner: root
         group: root
