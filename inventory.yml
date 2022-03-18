@@ -2,7 +2,6 @@ all:
   hosts: 
     yggdrasil.sport-touring.eu:
     raspi.sport-touring.eu:
-    njord.sport-touring.eu:
     bragi.sport-touring.eu:
     gefjon.sport-touring.eu:
     hermod.sport-touring.eu:
@@ -11,10 +10,7 @@ all:
     borr.sport-touring.eu:
     syn.sport-touring.eu:
     mani.sport-touring.eu:
-    vili.sport-touring.eu:
     forseti.sport-touring.eu:
-    beyla.sport-touring.eu:
-    saga.sport-touring.eu:
   vars:
 synology:
   hosts:
