@@ -46,19 +46,20 @@
         owner: root
         group: root
   # We also need to add the Zabbix agent so we can monitor the host, so let's do that now.
-#  roles:
-#    - role: community.zabbix.zabbix_agent
-#      zabbix_agent_server: raspi.sport-touring.eu
-#      #zabbix_agent_serveractive: raspi.sport-touring.eu
-#      zabbix_url: http://raspi.sport-touring.eu/zabbix
-#      zabbix_api_create_hosts: true
-#      zabbix_api_use: true
-#      zabbix_api_user: Admin
-#      zabbix_api_pass: kd!s5q%!s4Nf3LsE$rQQijWHg
-#      zabbix_create_host: present
-#      zabbix_host_groups:
-#        - Discovered hosts
-#        - Linux servers
-#        - Virtual machines
-#      zabbix_link_templates:
-#        - Linux by Zabbix agent
+  roles:
+    - role: community.zabbix.zabbix_agent
+      zabbix_agent_server: raspi.sport-touring.eu
+      #zabbix_agent_serveractive: raspi.sport-touring.eu
+      zabbix_url: http://raspi.sport-touring.eu/zabbix
+      zabbix_api_create_hosts: true
+      zabbix_api_use: true
+      zabbix_api_login_user: Admin
+      zabbix_api_login_pass: kd!s5q%!s4Nf3LsE$rQQijWHg
+      # zabbix_api: cc98833849238295ff729b42e42b2e9706099b4e4ada00ec5a32a4960c3c5e83
+      zabbix_create_host: present
+      zabbix_host_groups:
+        - Discovered hosts
+        - Linux servers
+        - Virtual machines
+      zabbix_link_templates:
+        - Linux by Zabbix agent
