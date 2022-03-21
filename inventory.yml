@@ -10,7 +10,6 @@ all:
     borr.sport-touring.eu:
     syn.sport-touring.eu:
     mani.sport-touring.eu:
-    forseti.sport-touring.eu:
   vars:
 synology:
   hosts:
