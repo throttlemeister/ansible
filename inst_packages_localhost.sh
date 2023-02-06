@@ -20,6 +20,7 @@ fi
 
 # If we are running dnf we check for MS reposiroties and install if needed
 if command -v dnf > /dev/null; then
+  dnf install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
   if [ -d /etc/yum.repos.d/microsoft-edge.repo ]; then
     rpm --import https://packages.microsoft.com/keys/microsoft.asc
     dnf config-manager --add-repo https://packages.microsoft.com/yumrepos/edge
