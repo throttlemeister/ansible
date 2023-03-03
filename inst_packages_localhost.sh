@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# User to setup profile and other files for
+SETUP_USER=throttlemeister
+
 # Check if Ansible is installed
 if ! command -v ansible-playbook > /dev/null; then
   echo "Ansible is not installed. Installing Ansible now..."
@@ -23,29 +26,29 @@ if command -v dnf > /dev/null; then
   dnf install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
   if [ -d /etc/yum.repos.d/microsoft-edge.repo ]; then
     rpm --import https://packages.microsoft.com/keys/microsoft.asc
-    dnf config-manager --add-repo https://packages.microsoft.com/yumrepos/edge
+    sudo cp /home/backup/etc/microsoft-edge.repo /etc/yum.repos.d
   fi
   if [ -d /etc/yum.repos.d/vscode.repo ]; then
     rpm --import https://packages.microsoft.com/keys/microsoft.asc
-    sh -c 'echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/vscode.repo'
+    sudo cp /home/backup/etc/microsoft-vscode.repo /etc/yum.repos.d
   fi
 fi
 
 # Do the same as previous, but on a apt based system like Debian or Ubuntu
-if command -v apt-get > /dev/null; then
-  apt-get install wget gpg
-  wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
-  install -D -o root -g root -m 644 packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg
-  if [ -d /usr/bin/code ]; then
-    add-apt-repository "deb [arch=amd64] https://packages.microsoft.com/repos/code stable main"
-    apt install apt-transport-https
-    apt update
-    apt install code
-  fi
-  if [ -d /usr/bin/microsoft-edge-stable ]; then
-    add-apt-repository "deb [arch=amd64] https://packages.microsoft.com/repos/edge stable main"
-    apt install microsoft-edge-stable
-fi
+#if command -v apt-get > /dev/null; then
+#  apt-get install wget gpg
+#  wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
+#  install -D -o root -g root -m 644 packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg
+#  if [ -d /usr/bin/code ]; then
+#    add-apt-repository "deb [arch=amd64] https://packages.microsoft.com/repos/code stable main"
+#    apt install apt-transport-https
+#    apt update
+#    apt install code
+#  fi
+#  if [ -d /usr/bin/microsoft-edge-stable ]; then
+#    add-apt-repository "deb [arch=amd64] https://packages.microsoft.com/repos/edge stable main"
+#    apt install microsoft-edge-stable
+#fi
 
 # Define the list of packages to install
 packages=(btop git lolcat figlet cowsay fish conky inxi alacritty cpu-x digikam exa ripgrep kalendar kdenlive kmail krita mc neofetch rawtherapee code microsoft-edge-stable)
@@ -83,3 +86,14 @@ ansible-playbook install-packages.yml
 
 # Clean up the playbook file
 rm install-packages.yml
+
+# Setup profile
+cd /home/$SETUP_USER
+tar xvfz /home/backup/profile_proper.tar.gz
+
+# Clone fish configuration and ansible
+cd /home/$SETUP_USER/.config
+git clone git@github.com:throttlemeister/fish.git
+cd /home/$SETUP_USER/
+git clone git@github.com:throttlemeister/ansible.git
+
