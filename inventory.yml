@@ -2,12 +2,9 @@ all:
   hosts: 
     yggdrasil.sport-touring.eu:
     raspi.sport-touring.eu:
-    bragi.sport-touring.eu:
     gefjon.sport-touring.eu:
-    hermod.sport-touring.eu:
     dvalinn.sport-touring.eu:
       vars: ansible_python_interpreter=/usr/bin/python3
-    mani.sport-touring.eu:
   vars:
 synology:
   hosts:
