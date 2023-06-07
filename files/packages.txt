@@ -20,3 +20,4 @@ neofetch
 rawtherapee
 code
 microsoft-edge-stable
+ktorrent

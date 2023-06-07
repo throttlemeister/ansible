@@ -51,7 +51,7 @@ fi
 #fi
 
 # Define the list of packages to install
-packages=(btop git lolcat figlet cowsay fish conky inxi alacritty cpu-x digikam exa ripgrep kalendar kdenlive kmail krita mc neofetch rawtherapee code microsoft-edge-stable)
+packages=(btop git lolcat figlet cowsay fish conky inxi alacritty cpu-x digikam exa ripgrep kalendar kdenlive kmail krita mc neofetch rawtherapee code microsoft-edge-stable ktorrent)
 
 # Create an Ansible playbook
 cat > install-packages.yml << EOL
