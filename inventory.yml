@@ -2,7 +2,6 @@ all:
   hosts: 
     yggdrasil.sport-touring.eu:
     raspi.sport-touring.eu:
-    gefjon.sport-touring.eu:
     dvalinn.sport-touring.eu:
       vars: ansible_python_interpreter=/usr/bin/python3
   vars:
