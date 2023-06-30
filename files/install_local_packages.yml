@@ -52,6 +52,20 @@
       repo: deb [arch=amd64] https://packages.microsoft.com/repos/edge stable main
       state: present
 
+- hosts: family_suse
+  name: Suse Linux based setup
+  become: yes
+  gather_facts: False
+  tasks:
+  - name: Install OPI
+    package:
+      name: opi
+      state: present
+  - name: Install MS Code and Edge
+    package:
+      name: vscode,microsof-edge-stable
+      state: present
+
 # Now finish with the installation of some required packages on any system.
 - hosts: localhost
   name: Install packages from file
