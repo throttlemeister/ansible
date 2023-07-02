@@ -1,5 +1,9 @@
 #!/bin/bash
 #
 # Set CPU governor to powersave
-echo powersave | sudo tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+if [ -e /usr/bin/cpupower ]; then
+	sudo cpupower frequency-set --governor powersave
+else
+	echo powersave | sudo tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+fi
 # EOF
