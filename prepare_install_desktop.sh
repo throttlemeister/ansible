@@ -19,24 +19,8 @@ if ! command -v ansible-playbook > /dev/null; then
     exit 1
   fi
 
-  # Install Ansible
+  # Install Ansible and git
   $package_manager ansible
-fi
-
-if ! command -v git > /dev/null; then
-  echo "Git is not installed. Installing Git now..."
-
-  # Determine the package manager to use for installing Git
-  if command -v dnf > /dev/null; then
-    package_manager="dnf install -y"
-  elif command -v apt-get > /dev/null; then
-    package_manager="apt-get install -y"
-  else
-    echo "Neither dnf nor apt-get was found. Please install one of them or modifiy the script to include your packagemananger."
-    exit 1
-  fi
-
-  # Install Git
   $package_manager git
 fi
 
