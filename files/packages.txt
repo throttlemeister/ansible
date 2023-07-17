@@ -1,5 +1,4 @@
 btop
-lolcat
 figlet
 cowsay
 fish

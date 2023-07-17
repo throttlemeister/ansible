@@ -52,7 +52,7 @@
       repo: deb [arch=amd64] https://packages.microsoft.com/repos/edge stable main
       state: present
 
-- hosts: family_suse
+- hosts: family_opensuse
   name: Suse Linux based setup
   become: yes
   gather_facts: False
