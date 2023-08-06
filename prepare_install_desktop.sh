@@ -24,15 +24,15 @@ if ! command -v ansible-playbook > /dev/null; then
   $package_manager git
 fi
 
+# Setup profile
+cd /home/$SETUP_USER
+tar xvfz ansible/files/profile_local.tar.gz
+
 # Clone fish configuration and ansible
 cd /home/$SETUP_USER/.config
 git clone git@github.com:throttlemeister/fish.git
 cd /home/$SETUP_USER/
 git clone git@github.com:throttlemeister/ansible.git
-
-# Setup profile
-#cd /home/$SETUP_USER
-#tar xvfz ansible/files/profile_local.tar.gz
 
 # Run the Ansible playbook to install standard packages
 ansible-playbook files/install_local_packages.yml
