@@ -16,14 +16,6 @@
   become: yes
   gather_facts: False
   tasks:
-  - name: Add Microsoft Edge repo
-    yum_repository:
-      name: microsoft-edge
-      description: Microsoft Edge Browser
-      baseurl: https://packages.microsoft.com/yumrepos/edge
-      gpgcheck: yes
-      gpgkey: https://packages.microsoft.com/keys/microsoft.asc
-      enabled: yes
   - name: Add Visual Studio Code repo
     yum_repository:
       name: vscode
@@ -47,10 +39,6 @@
     apt_repository:
       repo: deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main
       state: present
-  - name: Add Microsoft Edge repository
-    apt_repository:
-      repo: deb [arch=amd64] https://packages.microsoft.com/repos/edge stable main
-      state: present
 
 - hosts: family_Suse
   name: Suse Linux based setup
@@ -61,10 +49,8 @@
     package:
       name: opi
       state: present
-  - name: Install MS Code and Edge
-    package:
-      name: vscode,microsof-edge-stable
-      state: present
+  - name: Install VS Code
+    command: sudo opi -n vscode
 
 # Now finish with the installation of some required packages on any system.
 - hosts: localhost

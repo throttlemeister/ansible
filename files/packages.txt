@@ -17,3 +17,5 @@ mc
 neofetch
 rawtherapee
 ktorrent
+gcc
+patch
