@@ -15,7 +15,7 @@ if ! command -v ansible-playbook > /dev/null; then
   elif command -v zypper > /dev/null; then
   	package_manager="zypper install -y"
   else
-    echo "Neither dnf nor apt-get nor zypper was found. Please install one of them."
+    echo "Neither dnf nor apt-get nor zypper was found. Please install one of them or modify this script to match the distribution you are using"
     exit 1
   fi
 
