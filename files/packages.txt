@@ -7,7 +7,7 @@ inxi
 alacritty
 cpu-x
 digikam
-exa
+eza
 ripgrep
 kalendar
 kdenlive
