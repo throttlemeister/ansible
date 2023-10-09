@@ -19,3 +19,4 @@ rawtherapee
 ktorrent
 gcc
 patch
+bat
