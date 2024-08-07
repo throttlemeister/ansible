@@ -41,12 +41,12 @@ rm install-packages.yml
 opi -n msedge
 opi -n vscode
 
-# Setup profile
-cd /home/$SETUP_USER
-tar xvfz /home/backup/profile_proper.tar.gz
-
 # Clone fish configuration and ansible
 cd /home/$SETUP_USER/.config
 git clone git@github.com:throttlemeister/fish.git
 cd /home/$SETUP_USER/
 git clone git@github.com:throttlemeister/ansible.git
+
+# Setup profile
+cd /home/$SETUP_USER
+tar xvfz ansible/files/profile_local.tar.gz
