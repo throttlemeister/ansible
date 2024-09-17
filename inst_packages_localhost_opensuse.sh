@@ -4,17 +4,17 @@
 SETUP_USER=throttlemeister
 
 # Check if Ansible is installed
-if ! command -v ansible-playbook > /dev/null; then
+if ! command -v ansible-playbook >/dev/null; then
   echo "Ansible is not installed. Installing Ansible now..."
   # Install Ansible
   sudo zypper in -y ansible
 fi
 
 # Define the list of packages to install
-packages=(opi btop git lolcat figlet cowsay fish conky inxi alacritty cpu-x digikam eza ripgrep kalendar kdenlive kmail krita mc fastfetch rawtherapee ktorrent)
+packages=(opi stow btop git lolcat figlet cowsay fish conky inxi alacritty cpu-x digikam eza ripgrep kalendar kdenlive kmail krita mc fastfetch rawtherapee ktorrent)
 
 # Create an Ansible playbook
-cat > install-packages.yml << EOL
+cat >install-packages.yml <<EOL
 - name: Install Packages
   hosts: localhost
   become: yes
@@ -23,7 +23,7 @@ EOL
 
 # Add tasks for each package
 for package in "${packages[@]}"; do
-  cat >> install-packages.yml << EOL
+  cat >>install-packages.yml <<EOL
     - name: Install $package
       package:
         name: $package
