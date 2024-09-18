@@ -11,7 +11,7 @@ if ! command -v ansible-playbook >/dev/null; then
 fi
 
 # Define the list of packages to install
-packages=(opi stow btop git lolcat figlet cowsay fish conky inxi alacritty cpu-x digikam eza ripgrep kalendar kdenlive kmail krita mc fastfetch rawtherapee ktorrent)
+packages=(opi stow neovim btop git lolcat figlet cowsay fish conky inxi alacritty cpu-x digikam eza ripgrep kalendar kdenlive kmail krita mc fastfetch rawtherapee ktorrent)
 
 # Create an Ansible playbook
 cat >install-packages.yml <<EOL
@@ -41,12 +41,18 @@ rm install-packages.yml
 opi -n msedge
 opi -n vscode
 
-# Clone fish configuration and ansible
-cd /home/$SETUP_USER/.config
-git clone git@github.com:throttlemeister/fish.git
+# Clone ansible and setup profile
 cd /home/$SETUP_USER/
 git clone git@github.com:throttlemeister/ansible.git
-
-# Setup profile
 cd /home/$SETUP_USER
 tar xvfz ansible/files/profile_local.tar.gz
+
+# Clone dotfiles and use stow to setup the rest of the stuff
+cd /home/$SETUP_USER/
+mkdir .dotfiles
+cd .dotfiles
+git clone git@github.com:throttlemeister/dotfiles.github .
+stow *
+
+# Finally setup LazyVIM
+git clone https://github.com/LazyVim/starter /home/$SETUP_USER/.config/nvim
