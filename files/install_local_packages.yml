@@ -1,4 +1,3 @@
----
 # Let's do some stuff we know we need to do for each and every machine
 # but we do not want to do this for the Synology!
 - name: Talk to all hosts and learn about them
@@ -51,6 +50,8 @@
       state: present
   - name: Install VS Code
     command: sudo opi -n vscode
+  - name: Install Microsoft Edge
+    command: sudo opi -n msedge
 
 # Now finish with the installation of some required packages on any system.
 - hosts: localhost
