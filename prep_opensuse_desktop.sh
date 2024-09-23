@@ -17,7 +17,7 @@ if ! command -v ansible-playbook >/dev/null; then
 fi
 
 # Run the Ansible playbook to install standard packages
-ansible-playbook files/install_local_packages.yml
+ansible-playbook files/install_pkg_opensuse.yml
 
 # Clone dotfiles repo and use stow to setup the rest of the stuff
 cd /home/$SETUP_USER/
