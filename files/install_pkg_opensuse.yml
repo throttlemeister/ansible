@@ -7,23 +7,7 @@
     group_by:
       key: family_{{ ansible_facts['os_family'] }}
 
-# Do some OS specific stuff like adding the required repositories
-
-# - hosts: family_Suse
-#   name: Suse Linux based setup
-#   become: yes
-#   gather_facts: False
-#   tasks:
-  #   - name: Install OPI
-    #   package:
-      #   name: opi
-      # state: present
-  #   - name: Install VS Code
-    #   command: sudo opi -n vscode
-  #   - name: Install Microsoft Edge
-    #   command: sudo opi -n msedge
-
-# Now finish with the installation of some required packages on any system.
+# Do some OS specific stuff like using distro specific tools
 - hosts: family_Suse
   name: Install standard packages 
   become: yes
