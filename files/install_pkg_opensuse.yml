@@ -24,15 +24,16 @@
     #   command: sudo opi -n msedge
 
 # Now finish with the installation of some required packages on any system.
-- hosts: localhost
-  name: Install packages from file
+- hosts: family_Suse
+  name: Install standard packages 
   become: yes
+  gather_facts: False
   tasks:
-    - name: Install packages from file
+    - name: Read package list and install applications
       package:
         name: "{{ lookup('file', 'pkg_opensuse.txt').splitlines() }}"
         state: present
-    - name: Install Microsoft Visual Studio Code
+    - name: Install Microsoft Visual Studio Code from opi
       command: opi -n vscode
-    - name: Install Microsoft Edge Browser
+    - name: Install Microsoft Edge Browser from opi
       command: opi -n msedge
