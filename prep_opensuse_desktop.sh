@@ -23,7 +23,7 @@ ansible-playbook files/install_pkg_opensuse.yml
 cd /home/$SETUP_USER/
 mkdir .dotfiles
 cd .dotfiles
-git clone git@github.com:throttlemeister/dotfiles.github .
+git clone git@github.com:throttlemeister/dotfiles.git .
 stow *
 
 # Finally setup LazyVIM so we can have a nice VI experience.
