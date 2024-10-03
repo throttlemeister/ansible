@@ -23,3 +23,4 @@ patch
 bat
 stow
 neovim
+zoxide
