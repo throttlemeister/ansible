@@ -7,6 +7,25 @@
     group_by:
       key: family_{{ ansible_facts['os_family'] }}
 
+# Add the user to sudo
+- name: Setup sudo
+  hosts: localhost
+  tasks:
+  - name: Create sudoers file
+    lineinfile:
+      path: /etc/sudoers.d/throttlemeister
+      line: 'throttlemeister ALL=(ALL) NOPASSWD: ALL'
+      state: present
+      mode: 0440
+      create: yes
+      validate: 'visudo -cf %s'
+  - name: Ensure /etc/sudoers.d is included in sudoers
+    lineinfile:
+      dest: /etc/sudoers
+      line: "#includedir /etc/sudoers.d"
+      state: present
+      validate: "/usr/sbin/visudo -cf %s"
+
 # Do some OS specific stuff like using distro specific tools
 - hosts: family_Suse
   name: Install standard packages 
