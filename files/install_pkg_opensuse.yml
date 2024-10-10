@@ -1,5 +1,7 @@
 # Let's do some stuff we know we need to do for each and every machine
-# but we do not want to do this for the Synology!
+# We'll make it somewhat OS agnostic so it can be changed for something
+# other than OpenSUSE in the future, if needed.
+# So let's see what OS we are using.
 - name: Talk to all hosts and learn about them
   hosts: localhost
   tasks:
@@ -7,7 +9,24 @@
     group_by:
       key: family_{{ ansible_facts['os_family'] }}
 
-# Add the user to sudo
+# Do some OS specific stuff like using distro specific tools. We will
+# be installing aur standard packages first
+- hosts: family_Suse
+  name: Install standard packages 
+  become: yes
+  gather_facts: False
+  tasks:
+    - name: Read package list and install applications
+      package:
+        name: "{{ lookup('file', 'pkg_opensuse.txt').splitlines() }}"
+        state: present
+    - name: Install Microsoft Visual Studio Code from opi
+      command: opi -n vscode
+    - name: Install Microsoft Edge Browser from opi
+      command: opi -n msedge
+
+# Add the user to sudo. This will be the same regardless of what
+# we are running. As long as it is Linux.
 - name: Setup sudo
   hosts: localhost
   tasks:
@@ -25,18 +44,3 @@
       line: "#includedir /etc/sudoers.d"
       state: present
       validate: "/usr/sbin/visudo -cf %s"
-
-# Do some OS specific stuff like using distro specific tools
-- hosts: family_Suse
-  name: Install standard packages 
-  become: yes
-  gather_facts: False
-  tasks:
-    - name: Read package list and install applications
-      package:
-        name: "{{ lookup('file', 'pkg_opensuse.txt').splitlines() }}"
-        state: present
-    - name: Install Microsoft Visual Studio Code from opi
-      command: opi -n vscode
-    - name: Install Microsoft Edge Browser from opi
-      command: opi -n msedge
