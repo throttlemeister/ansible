@@ -26,7 +26,8 @@
       command: opi -n msedge
 
 # Add the user to sudo. This will be the same regardless of what
-# we are running. As long as it is Linux.
+# we are running. As long as it is Linux. It saves the information
+# under /etc/sudoers.d/ in a file per user
 - name: Setup sudo
   hosts: localhost
   tasks:
