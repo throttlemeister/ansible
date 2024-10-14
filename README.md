@@ -1,4 +1,5 @@
 **Ansible**
+
 A small collection of ansible scripts for me to set up new machines.
 - ansible.cfg: basic ansible configuration
 - bootstrap.yml: bootstrap a fresh server/VM install
