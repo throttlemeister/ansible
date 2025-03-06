@@ -22,3 +22,7 @@ patch
 bat
 stow
 neovim
+hugo
+bitwarden
+iosevka-fonts
+kitty
