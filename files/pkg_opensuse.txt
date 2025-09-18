@@ -24,3 +24,7 @@ bat
 stow
 neovim
 zoxide
+fd
+fzf
+tree-sitter
+lazygit
