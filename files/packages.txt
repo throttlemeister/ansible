@@ -24,5 +24,4 @@ stow
 neovim
 hugo
 bitwarden
-iosevka-fonts
 kitty
